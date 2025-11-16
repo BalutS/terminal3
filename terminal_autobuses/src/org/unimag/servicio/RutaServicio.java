@@ -40,12 +40,29 @@ public class RutaServicio implements ApiOperacionBD<RutaDto, Integer>{
 
     @Override
     public RutaDto inserInto(RutaDto objeto, String ruta) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        try {
+            miArchivo.crearFila(objeto.getIdRuta() + ";" + objeto.getCiudadOrigenRuta() + ";" + objeto.getCiudadDestinoRuta() + ";" + objeto.getTarifaRuta() + ";" + objeto.getNombreImagenPublicoRuta());
+        } catch (IOException ex) {
+            Logger.getLogger(RutaServicio.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return objeto;
     }
 
     @Override
     public List<RutaDto> selectFrom() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        List<RutaDto> rutas = new java.util.ArrayList<>();
+        try {
+            List<String> filas = miArchivo.obtenerFilas();
+            for (String fila : filas) {
+                String[] partes = fila.split(";");
+                if (partes.length == 5) {
+                    rutas.add(new RutaDto(Integer.parseInt(partes[0]), partes[1], partes[2], Double.parseDouble(partes[3]), partes[4]));
+                }
+            }
+        } catch (IOException ex) {
+            Logger.getLogger(RutaServicio.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return rutas;
     }
 
     @Override

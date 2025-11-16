@@ -40,12 +40,29 @@ public class EmpresaServicio implements ApiOperacionBD<EmpresaDto, Integer>{
 
     @Override
     public EmpresaDto inserInto(EmpresaDto objeto, String ruta) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        try {
+            miArchivo.crearFila(objeto.getIdEmpresa() + ";" + objeto.getNombreEmpresa() + ";" + objeto.getNombreImagenPublicoEmpresa());
+        } catch (IOException ex) {
+            Logger.getLogger(EmpresaServicio.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return objeto;
     }
 
     @Override
     public List<EmpresaDto> selectFrom() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        List<EmpresaDto> empresas = new java.util.ArrayList<>();
+        try {
+            List<String> filas = miArchivo.obtenerFilas();
+            for (String fila : filas) {
+                String[] partes = fila.split(";");
+                if (partes.length == 3) {
+                    empresas.add(new EmpresaDto(Integer.parseInt(partes[0]), partes[1], partes[2], ""));
+                }
+            }
+        } catch (IOException ex) {
+            Logger.getLogger(EmpresaServicio.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return empresas;
     }
 
     @Override

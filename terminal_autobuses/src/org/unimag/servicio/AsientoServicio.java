@@ -40,12 +40,29 @@ public class AsientoServicio implements ApiOperacionBD<AsientoDto, Integer>{
 
     @Override
     public AsientoDto inserInto(AsientoDto objeto, String ruta) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        try {
+            miArchivo.crearFila(objeto.getIdAsiento() + ";" + objeto.getIdBus() + ";" + objeto.isEstadoAsiento() + ";" + objeto.getNombreImagenPublicoAsiento());
+        } catch (IOException ex) {
+            Logger.getLogger(AsientoServicio.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return objeto;
     }
 
     @Override
     public List<AsientoDto> selectFrom() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        List<AsientoDto> asientos = new java.util.ArrayList<>();
+        try {
+            List<String> filas = miArchivo.obtenerFilas();
+            for (String fila : filas) {
+                String[] partes = fila.split(";");
+                if (partes.length == 4) {
+                    asientos.add(new AsientoDto(Integer.parseInt(partes[0]), Integer.parseInt(partes[1]), Boolean.parseBoolean(partes[2]), partes[3]));
+                }
+            }
+        } catch (IOException ex) {
+            Logger.getLogger(AsientoServicio.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return asientos;
     }
 
     @Override

@@ -40,12 +40,29 @@ public class BusServicio implements ApiOperacionBD<BusDto, Integer>{
 
     @Override
     public BusDto inserInto(BusDto objeto, String ruta) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        try {
+            miArchivo.crearFila(objeto.getIdBus() + ";" + objeto.getModeloBus() + ";" + objeto.getIdEmpresa() + ";" + objeto.getNombreImagenPublicoBus());
+        } catch (IOException ex) {
+            Logger.getLogger(BusServicio.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return objeto;
     }
 
     @Override
     public List<BusDto> selectFrom() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        List<BusDto> buses = new java.util.ArrayList<>();
+        try {
+            List<String> filas = miArchivo.obtenerFilas();
+            for (String fila : filas) {
+                String[] partes = fila.split(";");
+                if (partes.length == 4) {
+                    buses.add(new BusDto(Integer.parseInt(partes[0]), partes[1], Integer.parseInt(partes[2]), partes[3]));
+                }
+            }
+        } catch (IOException ex) {
+            Logger.getLogger(BusServicio.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return buses;
     }
 
     @Override
