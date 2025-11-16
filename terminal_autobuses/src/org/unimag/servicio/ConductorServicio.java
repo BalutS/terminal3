@@ -45,7 +45,19 @@ public class ConductorServicio implements ApiOperacionBD<ConductorDto, Integer>{
 
     @Override
     public List<ConductorDto> selectFrom() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        List<ConductorDto> conductores = new java.util.ArrayList<>();
+        try {
+            List<String> filas = miArchivo.obtenerFilas();
+            for (String fila : filas) {
+                String[] partes = fila.split(";");
+                if (partes.length == 5) {
+                    conductores.add(new ConductorDto(partes[0], partes[1], Integer.parseInt(partes[2]), Boolean.parseBoolean(partes[3]), partes[4]));
+                }
+            }
+        } catch (IOException ex) {
+            Logger.getLogger(ConductorServicio.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return conductores;
     }
 
     @Override

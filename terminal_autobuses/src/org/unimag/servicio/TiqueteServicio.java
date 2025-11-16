@@ -40,7 +40,12 @@ public class TiqueteServicio implements ApiOperacionBD<TiqueteDto, Integer>{
 
     @Override
     public TiqueteDto inserInto(TiqueteDto objeto, String ruta) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        try {
+            miArchivo.crearFila(objeto.getIdTiquete() + ";" + objeto.getIdPasajero() + ";" + objeto.getIdViaje() + ";" + objeto.getIdAsiento() + ";" + objeto.getNombreImagenPublicoTiquete());
+        } catch (IOException ex) {
+            Logger.getLogger(TiqueteServicio.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return objeto;
     }
 
     @Override

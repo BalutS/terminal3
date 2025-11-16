@@ -40,12 +40,29 @@ public class PasajeroServicio implements ApiOperacionBD<PasajeroDto, Integer>{
 
     @Override
     public PasajeroDto inserInto(PasajeroDto objeto, String ruta) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        try {
+            miArchivo.crearFila(objeto.getCedulaPasajero() + ";" + objeto.getNombrePasajero() + ";" + objeto.getEdadPasajero() + ";" + objeto.isGeneroPasajero() + ";" + objeto.getNombreImagenPublicoPasajero());
+        } catch (IOException ex) {
+            Logger.getLogger(PasajeroServicio.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return objeto;
     }
 
     @Override
     public List<PasajeroDto> selectFrom() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        List<PasajeroDto> pasajeros = new java.util.ArrayList<>();
+        try {
+            List<String> filas = miArchivo.obtenerFilas();
+            for (String fila : filas) {
+                String[] partes = fila.split(";");
+                if (partes.length == 5) {
+                    pasajeros.add(new PasajeroDto(partes[0], partes[1], Integer.parseInt(partes[2]), Boolean.parseBoolean(partes[3]), partes[4]));
+                }
+            }
+        } catch (IOException ex) {
+            Logger.getLogger(PasajeroServicio.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return pasajeros;
     }
 
     @Override

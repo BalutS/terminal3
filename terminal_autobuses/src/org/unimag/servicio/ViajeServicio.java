@@ -40,12 +40,29 @@ public class ViajeServicio implements ApiOperacionBD<ViajeDto, Integer>{
 
     @Override
     public ViajeDto inserInto(ViajeDto objeto, String ruta) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        try {
+            miArchivo.crearFila(objeto.getIdViaje() + ";" + objeto.getIdRuta() + ";" + objeto.getIdConductor() + ";" + objeto.getIdBus() + ";" + objeto.getFechaViaje() + ";" + objeto.getHoraViaje() + ";" + objeto.getNombreImagenPublicoViaje());
+        } catch (IOException ex) {
+            Logger.getLogger(ViajeServicio.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return objeto;
     }
 
     @Override
     public List<ViajeDto> selectFrom() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        List<ViajeDto> viajes = new java.util.ArrayList<>();
+        try {
+            List<String> filas = miArchivo.obtenerFilas();
+            for (String fila : filas) {
+                String[] partes = fila.split(";");
+                if (partes.length == 7) {
+                    viajes.add(new ViajeDto(Integer.parseInt(partes[0]), Integer.parseInt(partes[1]), partes[2], Integer.parseInt(partes[3]), partes[4], partes[5], partes[6]));
+                }
+            }
+        } catch (IOException ex) {
+            Logger.getLogger(ViajeServicio.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return viajes;
     }
 
     @Override
